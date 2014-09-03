@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<configuration>
+  <property>
+    <name>yarn.app.mapreduce.am.resource.mb</name>
+    <value>1024</value>
+  </property>
+  <property>
+    <name>yarn.app.mapreduce.am.command-opts</name>
+    <value>-Xmx768m</value>
+  </property>
+  <property>
+    <name>mapreduce.framework.name</name>
+<!--    <value>yarn</value>-->
+    <value>yarn-tez</value>
+    <description>Execution framework</description>
+  </property>
+  <property>
+    <name>mapreduce.map.cpu.vcores</name>
+    <value>1</value>
+    <description>The number of virtual cores required for each map task.</description>
+  </property>
+  <property>
+    <name>mapreduce.reduce.cpu.vcores</name>
+    <value>1</value>
+    <description>The number of virtual cores required for each reduce task.</description>
+  </property>
+  <property>
+    <name>mapreduce.map.memory.mb</name>
+    <value>1024</value>
+    <description>Larger resource limit for maps.</description>
+  </property>
+  <property>
+    <name>mapreduce.map.java.opts</name>
+    <value>-Xmx768m</value>
+    <description>Heap-size for child jvms of maps</description>
+  </property>
+  <property>
+    <name>mapreduce.reduce.memory.mb</name>
+    <value>1024</value>
+    <description>Larger resource limit for reduces.</description>
+  </property>
+  <property>
+    <name>mapreduce.reduce.java.opts</name>
+    <value>-Xmx768m</value>
+    <description>Heap-size for child jvms of reduces.</description>
+  </property>
+  <!-- Job Tracker -->
+  <property>
+    <name>mapreduce.jobtracker.address</name>
+    <value>Annaba:8021</value>
+  </property>
+  <property>
+    <name>mapreduce.jobtracker.http.address</name>
+    <value>Annaba:50030</value>
+  </property>
+  
+</configuration>

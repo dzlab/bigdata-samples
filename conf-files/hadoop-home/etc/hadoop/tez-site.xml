@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<configuration>
+  <property>
+    <name>tez.version</name>
+    <value>0.4.1</value>
+  </property>
+  <property>
+    <name>tez.lib.uris</name>
+    <value>${fs.default.name}/apps/tez-${tez.version}-incubating,${fs.default.name}/apps/tez-${tez.version}-incubating/lib/</value>
+  </property>
+</configuration>

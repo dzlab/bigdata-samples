@@ -26,7 +26,8 @@ $HADOOP_PREFIX/sbin/yarn-daemon.sh start historyserver
 # or
 #$HADOOP_PREFIX/bin/hadoop jar $HADOOP_PREFIX/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.5.0.jar org.apache.hadoop.yarn.applications.distributedshell.Client --jar $HADOOP_PREFIX/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.5.0.jar --shell_command date --num_containers 2 --master_memory 1024
 
-
+echo "starting thrift server to expose Hive to presto"
+hive --service hiveserver &
 echo "launching hive services (metastore, web interface) and command line"
 hive --service metastore
 hive --service hwi

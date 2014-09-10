@@ -1,4 +1,4 @@
-package dz.lab.hbase;
+package dz.lab.hdfs;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

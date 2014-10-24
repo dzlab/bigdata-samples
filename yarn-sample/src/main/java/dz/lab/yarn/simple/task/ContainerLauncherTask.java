@@ -1,5 +1,7 @@
 package dz.lab.yarn.simple.task;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.logging.Logger;
 
@@ -9,8 +11,6 @@ import org.apache.hadoop.yarn.api.records.Container;
 import org.apache.hadoop.yarn.api.records.ContainerLaunchContext;
 import org.apache.hadoop.yarn.client.api.NMClient;
 import org.apache.hadoop.yarn.util.Records;
-
-import dz.lab.yarn.simple.ApplicationClient;
 
 
 /**
@@ -43,11 +43,11 @@ public class ContainerLauncherTask implements Runnable
      * .append(" 2> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/stderr") .toString();
      */
     
-    String simpleApp = new StringBuilder("$JAVA_HOME/bin/java").append(" -jar ").append(ApplicationClient.sampleAppUri)
-        .append(" ").append(HelloServer.class.getName()).append(" 1> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR)
-        .append("/stdout").append(" 2> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/stderr").toString();
+//    String simpleApp = new StringBuilder("$JAVA_HOME/bin/java").append(" -jar ").append(ApplicationClient.sampleAppUri)
+//        .append(" ").append(HelloServer.class.getName()).append(" 1> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR)
+//        .append("/stdout").append(" 2> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/stderr").toString();
     // List<String> commands = Arrays.asList(dateCommand, lsCommand, simpleApp);
-    // List<String> commands = Arrays.asList(simpleApp);
+    //List<String> commands = Arrays.asList(simpleApp);
     
     String command = "ls";
     LOG.info("Launching container "+containerId+" to run a command: "+command);    
@@ -57,6 +57,12 @@ public class ContainerLauncherTask implements Runnable
         " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout" +
         " 2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stderr"));
 
+  }
+  
+  public static void main(String[] args) throws URISyntaxException
+  {
+    URI uri = new URI("file:/home/hadoop/yarn-sample/63/yarn-sample.jar");
+    System.out.println("path: "+uri.getPath());
   }
 
 }

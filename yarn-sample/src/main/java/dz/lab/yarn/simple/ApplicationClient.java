@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -39,21 +43,55 @@ public class ApplicationClient
 {
   private static final Logger LOG = Logger.getLogger(ApplicationClient.class.getName());
   
-  private static YarnConfiguration yarnConf;
-  private static String appName = "yarn-sample";
-  public static String sampleAppUri;
+  private YarnConfiguration yarnConf;
+  private static String appName = "yarn-sample";  
+  private Path srcJarPath;
+  private Path dstJarPath;
+
+  public static void main(String[] args) throws YarnException, IOException, InterruptedException, ParseException
+  {
+    ApplicationClient appClient = new ApplicationClient();
+    if(!appClient.init(args))
+    {
+      System.exit(1);
+    }
+    appClient.run();
+  }
+  
+  
+  public ApplicationClient()
+  {
+    yarnConf = new YarnConfiguration();
+  }
+  
   /**
    * The command that will be executed by the application master
-   */
-  
-  
-  public static void main(String[] args) throws YarnException, IOException, InterruptedException
+   * @throws ParseException 
+   */  
+  public boolean init(String[] args) throws ParseException
   {
-    Path srcJarPath = new Path(args[0]);
-    String message = args[1];    
+    // prepare options parser
+    Options opts = new Options();
+    opts.addOption("jar", true, "JAR file containing the application");
+    opts.addOption("help", false, "Print usage");
+    opts.addOption("debug", false, "Dump out debug information");
     
-    // Create a Yarn Client
-    yarnConf = new YarnConfiguration();
+    // parse given CLI arguments
+    CommandLine cliParser = new GnuParser().parse(opts, args);
+    
+    if (!cliParser.hasOption("jar")) {
+      LOG.info("No jar file is specified for the application master");
+      return false;
+    }
+    
+    String jar = cliParser.getOptionValue("jar");
+    this.srcJarPath = new Path(jar);
+    return true;
+  }
+  
+  public void run() throws YarnException, IOException
+  {
+    // Create a Yarn Client    
     YarnClient yarnClient = YarnClient.createYarnClient();
     yarnClient.init(yarnConf);
     yarnClient.start();
@@ -66,12 +104,14 @@ public class ApplicationClient
     ApplicationSubmissionContext appContext = app.getApplicationSubmissionContext();    
     ApplicationId appId = appContext.getApplicationId();
     
-    Path dstJarPath = copyAppJarToHDFS(appId, srcJarPath);
+    String sampleAppUri = copyAppJarToHDFS(appId);
     
     // Set up the launch context for the container that will host the application master
-    StringBuilder commandBuilder = new StringBuilder("$JAVA_HOME/bin/java").append(" ").append(ApplicationMasterAsync.class.getName());
-    //commandBuilder.append(" --jar").append(" ").append(sampleAppUri);
-    commandBuilder.append(" ").append(message);
+    StringBuilder commandBuilder = new StringBuilder("$JAVA_HOME/bin/java");
+    //commandBuilder.append(" -classpath ").append(sampleAppUri);
+    commandBuilder.append(" ").append(ApplicationMasterAsync.class.getName());
+    commandBuilder.append(" -jar ").append(sampleAppUri);
+    //commandBuilder.append(" ").append(message);
     commandBuilder.append(" 1> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/stdout");
     commandBuilder.append(" 2> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/stderr");
     LOG.info("Command for invoking application master is: "+commandBuilder);
@@ -120,24 +160,29 @@ public class ApplicationClient
     monitorApplication(yarnClient, appId);    
   }
   
-  public static void checkMaximumResources(YarnClientApplication app)
+  public void checkMaximumResources(YarnClientApplication app)
   {
     GetNewApplicationResponse appResponse = app.getNewApplicationResponse();
     int maxMem = appResponse.getMaximumResourceCapability().getMemory();
     LOG.info("maximum available memory for ApplicationMaster is: " + maxMem);
     int maxVC = appResponse.getMaximumResourceCapability().getVirtualCores();
     LOG.info("maximum available virtual cores for ApplicationMaster is: " + maxVC);
-  }
-  
-  public static Path copyAppJarToHDFS(ApplicationId appId, Path src) throws IOException
+  }  
+  /**
+   * 
+   * @param appId
+   * @return a string URI to the destination jar file
+   * @throws IOException
+   */
+  public String copyAppJarToHDFS(ApplicationId appId) throws IOException
   {
     FileSystem fs = FileSystem.get(yarnConf);
     String pathSuffix = appName + File.separator + appId.getId() + File.separator + "yarn-sample.jar";
-    Path dstJarPath = new Path(fs.getHomeDirectory(), pathSuffix);
-    sampleAppUri = dstJarPath.toUri().toString();
-    fs.copyFromLocalFile(false, true, src, dstJarPath);
+    this.dstJarPath = new Path(fs.getHomeDirectory(), pathSuffix);
+    fs.copyFromLocalFile(false, true, this.srcJarPath, this.dstJarPath);
+    String sampleAppUri = dstJarPath.toUri().toString();
     LOG.info("Copied jar file to hdfs: " + sampleAppUri);
-    return dstJarPath;
+    return sampleAppUri;
   }
   
   public static void setupAppMasterJar()
@@ -155,7 +200,7 @@ public class ApplicationClient
    * @throws YarnException
    * @throws IOException
    */
-  private static boolean monitorApplication(YarnClient yarnClient, ApplicationId appId)
+  private boolean monitorApplication(YarnClient yarnClient, ApplicationId appId)
       throws YarnException, IOException {
 
     while (true) {

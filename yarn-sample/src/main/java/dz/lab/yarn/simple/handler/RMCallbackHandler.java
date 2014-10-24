@@ -23,12 +23,13 @@ public class RMCallbackHandler implements AMRMClientAsync.CallbackHandler
   private static final Logger LOG = Logger.getLogger(RMCallbackHandler.class.getName());
 
   private final NMClientAsync nmClient;
-  private final String message;  
+  private final String        jar;
 
-  public RMCallbackHandler(NMClientAsync nmClient, String message)
+  public RMCallbackHandler(NMClientAsync nmClient, String jar)
   {
     this.nmClient = nmClient;
-    this.message = message;
+    this.jar = jar;
+    LOG.info("Instantiating the handler for Resource Manager callback");
   }
 
   /*
@@ -66,9 +67,17 @@ public class RMCallbackHandler implements AMRMClientAsync.CallbackHandler
 
       String logDir = System.getenv(ApplicationConstants.LOG_DIR_EXPANSION_VAR);
             
-      String command = new StringBuilder("/bin/echo ").append(message)
-          .append(" 1> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/echo_stdout")
-          .append(" 2> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/echo_stderr")
+//      String command = new StringBuilder("/bin/echo ").append(message)
+//          .append(" 1> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/echo_stdout")
+//          .append(" 2> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/echo_stderr")
+//          .toString();
+      
+      
+      String command = new StringBuilder("$JAVA_HOME/bin/java")
+          .append(" ").append("-classpath").append(" ").append(this.jar)
+          .append(" ").append(HelloServer.class.getName())
+          .append(" 1> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/http_stdout")
+          .append(" 2> ").append(ApplicationConstants.LOG_DIR_EXPANSION_VAR).append("/http_stderr")
           .toString();
       
       LOG.info("Command to execute: " + command);

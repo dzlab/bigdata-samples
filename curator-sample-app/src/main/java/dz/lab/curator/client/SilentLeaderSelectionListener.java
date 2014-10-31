@@ -1,12 +1,3 @@
-/**
- * (c) Copyright 2005-2014 Heavenize SAS
- * 34, rue serpente, 75006 Paris, FRANCE
- * HEAVENIZE project
- *
- * This code is the property of Heavenize SAS
- * Registration : RCS PARIS B 508 496 528
- * For any question or license, please contact Heavenize at info@heavenize.com
- */
 package dz.lab.curator.client;
 
 import java.io.Closeable;
@@ -23,23 +14,23 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * 
- * @author dzlab (dzlabs@outlook.com) , 20 août 2014
+ *
+ * @author dzlab (dzlabs@outlook.com) , 20 aoï¿½t 2014
  */
 public class SilentLeaderSelectionListener implements Closeable, LeaderSelectorListener
 {
   /**
    * Logger for class {@link SilentLeaderSelectionListener}.
    */
-  
+
   private final static Logger log = LoggerFactory.getLogger(SilentLeaderSelectionListener.class);
 
   private final String name;
   private final LeaderSelector leaderSelector;
   private final AtomicInteger leaderCount = new AtomicInteger();
-  
+
   private volatile Thread     ourThread = null;
-  
+
   public SilentLeaderSelectionListener(CuratorFramework client, String path, String name)
   {
       this.name = name;
@@ -52,7 +43,7 @@ public class SilentLeaderSelectionListener implements Closeable, LeaderSelectorL
       // for most cases you will want your instance to requeue when it relinquishes leadership
       leaderSelector.autoRequeue();
   }
-  
+
   public void start() throws IOException
   {
       // the selection for this instance doesn't start until the leader selector is started
@@ -71,7 +62,7 @@ public class SilentLeaderSelectionListener implements Closeable, LeaderSelectorL
   {
     leaderSelector.close();
   }
-  
+
   /* (non-Javadoc)
    * @see org.apache.curator.framework.state.ConnectionStateListener#stateChanged(org.apache.curator.framework.CuratorFramework, org.apache.curator.framework.state.ConnectionState)
    */
@@ -79,7 +70,7 @@ public class SilentLeaderSelectionListener implements Closeable, LeaderSelectorL
   public void stateChanged(CuratorFramework client, ConnectionState newState)
   {
     // you MUST handle connection state changes. This WILL happen in production code.
-    
+
     if ( (newState == ConnectionState.LOST) || (newState == ConnectionState.SUSPENDED) )
     {
         if ( ourThread != null )
@@ -96,7 +87,7 @@ public class SilentLeaderSelectionListener implements Closeable, LeaderSelectorL
   public void takeLeadership(CuratorFramework client) throws Exception
   {
     // we are now the leader. This method should not return until we want to relinquish leadership
-    
+
     final int         waitSeconds = (int)(5 * Math.random()) + 1;
 
     ourThread = Thread.currentThread();

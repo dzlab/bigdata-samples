@@ -1,12 +1,3 @@
-/**
- * (c) Copyright 2005-2014 Heavenize SAS
- * 34, rue serpente, 75006 Paris, FRANCE
- * HEAVENIZE project
- *
- * This code is the property of Heavenize SAS
- * Registration : RCS PARIS B 508 496 528
- * For any question or license, please contact Heavenize at info@heavenize.com
- */
 package dz.lab.curator;
 
 import org.apache.curator.framework.CuratorFramework;
@@ -25,17 +16,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 
- * @author dzlab (dzlabs@outlook.com) , 14 août 2014
+ *
+ * @author dzlab (dzlabs@outlook.com) , 14 aoï¿½t 2014
  */
 @Controller
 @RequestMapping("/stats")
 public class ZKController
-{  
+{
   private final Logger log = LoggerFactory.getLogger(getClass());
-  
+
   CuratorFramework client;
-  
+
   public ZKController()
   {
     // start client
@@ -45,7 +36,7 @@ public class ZKController
         .namespace("heavenize")
         .build();
 
-    client.getConnectionStateListenable().addListener(new ConnectionStateListener() {      
+    client.getConnectionStateListenable().addListener(new ConnectionStateListener() {
       @Override
       public void stateChanged(CuratorFramework client, ConnectionState newState)
       {
@@ -53,7 +44,7 @@ public class ZKController
       }
     });
   }
-    
+
   @RequestMapping(method = RequestMethod.GET)
   public String get()
   {

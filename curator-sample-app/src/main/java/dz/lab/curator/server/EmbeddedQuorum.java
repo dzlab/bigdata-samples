@@ -1,12 +1,3 @@
-/**
- * (c) Copyright 2005-2014 Heavenize SAS
- * 34, rue serpente, 75006 Paris, FRANCE
- * HEAVENIZE project
- *
- * This code is the property of Heavenize SAS
- * Registration : RCS PARIS B 508 496 528
- * For any question or license, please contact Heavenize at info@heavenize.com
- */
 package dz.lab.curator.server;
 
 import java.lang.reflect.Field;
@@ -21,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * 
- * @author dzlab (dzlabs@outlook.com) , 19 août 2014
+ *
+ * @author dzlab (dzlabs@outlook.com) , 19 aoï¿½t 2014
  */
 public class EmbeddedQuorum
 {
@@ -30,10 +21,10 @@ public class EmbeddedQuorum
    * Logger for class {@link EmbeddedQuorum}.
    */
   private final static Logger log = LoggerFactory.getLogger(EmbeddedQuorum.class);
-  
+
   private QuorumPeerMain quorum;
   private QuorumPeer peer;
-  
+
   public EmbeddedQuorum()
   {
     this.quorum = new QuorumPeerMain();
@@ -53,12 +44,12 @@ public class EmbeddedQuorum
 
     quorum.runFromConfig(config);
   }
-  
+
   public void stop()
   {
     peer.shutdown();
   }
-  
+
   private QuorumPeer getQuorumPeer()
   {
     QuorumPeer peer = null;

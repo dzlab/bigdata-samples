@@ -1,12 +1,3 @@
-/**
- * (c) Copyright 2005-2014 Heavenize SAS
- * 34, rue serpente, 75006 Paris, FRANCE
- * HEAVENIZE project
- *
- * This code is the property of Heavenize SAS
- * Registration : RCS PARIS B 508 496 528
- * For any question or license, please contact Heavenize at info@heavenize.com
- */
 package dz.lab.curator.client;
 
 import java.io.IOException;
@@ -23,7 +14,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * @author dzlab (dzlabs@outlook.com) , 19 août 2014
+ * @author dzlab (dzlabs@outlook.com) , 19 aoï¿½t 2014
  */
 public class ZookeeperClientManager implements InitializingBean, DisposableBean
 {
@@ -36,20 +27,20 @@ public class ZookeeperClientManager implements InitializingBean, DisposableBean
   private SilentLeaderSelectionListener listener;
 
   private final String connectString;
-  
+
   public ZookeeperClientManager() throws IOException
   {
     Properties zkProp = new Properties();
     zkProp.load(getClass().getResourceAsStream("/zk.properties"));
-    
+
     String port = zkProp.getProperty("clientPort");
     port = port!=null ? port:"2181";
     String addr = zkProp.getProperty("serverAddr");
     addr = addr!=null ? addr: "localhost";
-    
+
     this.connectString = String.format("%s:%s", addr, port);
   }
-  
+
   /*
    * (non-Javadoc)
    * @see org.springframework.beans.factory.DisposableBean#destroy()
@@ -73,7 +64,7 @@ public class ZookeeperClientManager implements InitializingBean, DisposableBean
   }
 
   /**
-   * 
+   *
    */
   private void startClient()
   {
@@ -84,7 +75,7 @@ public class ZookeeperClientManager implements InitializingBean, DisposableBean
         .namespace("heavenize")
         .build();
     //
-    client.getConnectionStateListenable().addListener(new ConnectionStateListener() {      
+    client.getConnectionStateListenable().addListener(new ConnectionStateListener() {
       @Override
       public void stateChanged(CuratorFramework client, ConnectionState newState)
       {
@@ -94,7 +85,7 @@ public class ZookeeperClientManager implements InitializingBean, DisposableBean
     // start client
     client.start();
   }
-  
+
   private void startListener() throws IOException
   {
     String[] animals = {"elephant", "lion", "python", "tiger", "mouse", "zebra", "fennec", "wolf", "shark", "monkey", "panda"};

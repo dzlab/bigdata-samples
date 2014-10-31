@@ -1,12 +1,3 @@
-/**
- * (c) Copyright 2005-2014 Heavenize SAS
- * 34, rue serpente, 75006 Paris, FRANCE
- * HEAVENIZE project
- *
- * This code is the property of Heavenize SAS
- * Registration : RCS PARIS B 508 496 528
- * For any question or license, please contact Heavenize at info@heavenize.com
- */
 package dz.lab.curator.server;
 
 import java.util.Properties;
@@ -20,8 +11,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import dz.lab.curator.commons.ZookeeperUtils;
 
 /**
- * 
- * @author dzlab (dzlabs@outlook.com) , 21 août 2014
+ *
+ * @author dzlab (dzlabs@outlook.com) , 21 aoï¿½t 2014
  */
 public class ZookeeperQuorumManager implements InitializingBean, DisposableBean
 {
@@ -29,7 +20,7 @@ public class ZookeeperQuorumManager implements InitializingBean, DisposableBean
    * Logger for class {@link ZookeeperQuorumManager}.
    */
   private final static Logger log = LoggerFactory.getLogger(ZookeeperQuorumManager.class);
-  
+
   private final EmbeddedQuorum         quorum;
 
   private ThreadPoolTaskExecutor taskExecutor;
@@ -38,7 +29,7 @@ public class ZookeeperQuorumManager implements InitializingBean, DisposableBean
   {
     this.quorum = new EmbeddedQuorum();
   }
-  
+
   /**
    * @param taskExecutor the taskExecutor to set
    */

@@ -1,12 +1,3 @@
-/**
- * (c) Copyright 2005-2014 Heavenize SAS
- * 34, rue serpente, 75006 Paris, FRANCE
- * HEAVENIZE project
- *
- * This code is the property of Heavenize SAS
- * Registration : RCS PARIS B 508 496 528
- * For any question or license, please contact Heavenize at info@heavenize.com
- */
 package dz.lab.curator.server;
 
 import java.io.IOException;
@@ -21,8 +12,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import dz.lab.curator.commons.ZookeeperUtils;
 
 /**
- * 
- * @author dzlab (dzlabs@outlook.com) , 21 août 2014
+ *
+ * @author dzlab (dzlabs@outlook.com) , 21 aoï¿½t 2014
  */
 public class ZookeeperServerManager implements InitializingBean, DisposableBean
 {
@@ -30,21 +21,21 @@ public class ZookeeperServerManager implements InitializingBean, DisposableBean
    * Logger for class {@link ZookeeperServerManager}.
    */
   private final static Logger log = LoggerFactory.getLogger(ZookeeperServerManager.class);
-  
+
   private EmbeddedZookeeper      zk;
 
   private ThreadPoolTaskExecutor taskExecutor;
 
   private String directory;
   private String port;
-  
+
   public ZookeeperServerManager() throws IOException
   {
     Properties zkProp = ZookeeperUtils.loadServerProperties();
     this.port = zkProp.getProperty("clientPort");
     this.directory = zkProp.getProperty("dataDir");
   }
-  
+
   /**
    * @param taskExecutor the taskExecutor to set
    */
@@ -52,7 +43,7 @@ public class ZookeeperServerManager implements InitializingBean, DisposableBean
   {
     this.taskExecutor = taskExecutor;
   }
-  
+
   /**
    * @param port the port to set
    */
@@ -60,7 +51,7 @@ public class ZookeeperServerManager implements InitializingBean, DisposableBean
   {
     this.port = port;
   }
-  
+
   /**
    * @param directory the directory to set
    */

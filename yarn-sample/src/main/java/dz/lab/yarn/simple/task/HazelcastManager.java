@@ -1,9 +1,7 @@
 package dz.lab.yarn.simple.task;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.Future;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import com.hazelcast.config.ClasspathXmlConfig;
@@ -19,7 +17,12 @@ public class HazelcastManager
   private static final Logger LOG = Logger.getLogger(HazelcastManager.class.getName());
   
   private HazelcastInstance hz;
-
+  private final Map<String, CountTaskManager> jobs;
+  
+  public HazelcastManager() {
+    jobs = new HashMap<String, CountTaskManager>();
+  }
+  
   public void startHazelcast()
   {
     LOG.info("Starting hazelcast instance");   
@@ -36,33 +39,23 @@ public class HazelcastManager
     }
   }
     
-  public int process(String filename) { 
-    // read the file content
-    Scanner s = Utils.getScanner(filename);
-    if(s == null) 
-      return -1;
-      
-    // submit tasks to hazelcast executor
+  public boolean process(String filename) {     
     IExecutorService executor = hz.getExecutorService("executor");
     IMap<String, Integer> words = hz.getMap("words");
-    List<Future<Integer>> results = new ArrayList<Future<Integer>>();
-    while(s.hasNextLine()) {
-      Utils.sleep(10);
-      String line = s.nextLine();
-      Future<Integer> r = executor.submit(new CountTask(words, line));
-      results.add(r);
+    CountTaskManager manager = new CountTaskManager(executor, words, filename);
+    jobs.put(filename, manager);
+    executor.execute(manager);   
+    return true;
+  }
+  
+  public String status(String filename) {
+    CountTaskManager manager = jobs.get(filename);
+    if(manager == null)
+    {
+      return "No job was submitted for: " + filename;
     }
-    if(s != null) s.close();
-    int total = 0;
-    for(Future<Integer> r: results) {
-      try {
-        total += r.get();
-      }catch(Exception e) {
-        e.printStackTrace();
-      }
-    }
-    LOG.info("Successfully processed " + total + " word(s).");
-    return total;
+    String status = "{'running': "+manager.isRunning()+", 'finished': "+manager.hasFinished()+"}";
+    return status;
   }
   
 }

@@ -47,12 +47,20 @@ public class HelloServer extends NanoHTTPD
         // manage Hazelcast
         hazelcast.stopHazelcast();
         msg = "Stopping Hazelcast";
-      }else {
+      }
+      else if(uri.startsWith("/hazelcast/submit"))
+      {
         // process the job submitted to Hazelcast
-        int index = uri.indexOf("/hazelcast")+"/hazelcast".length();
+        int index = uri.indexOf("/hazelcast/submit")+"/hazelcast/submit".length();
         String filename = uri.substring(index);
-        int lines = hazelcast.process(filename);
-        msg = "Successfully processed " + lines + " word(s) from " + filename;
+        boolean success = hazelcast.process(filename);
+        msg = "Submitted " + filename + " to be processed? " + success;
+      }
+      else if(uri.startsWith("/hazelcast/status"))
+      {
+        int index = uri.indexOf("/hazelcast/status")+"/hazelcast/status".length();
+        String filename = uri.substring(index);        
+        msg = hazelcast.status(filename);
       }
     }
     else if(uri.startsWith("/nanohttpd"))

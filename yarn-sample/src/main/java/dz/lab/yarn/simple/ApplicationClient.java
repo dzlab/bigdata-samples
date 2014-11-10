@@ -62,6 +62,8 @@ public class ApplicationClient
   public ApplicationClient()
   {
     yarnConf = new YarnConfiguration();
+    yarnConf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+    yarnConf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());        
   }
   
   /**

@@ -11,25 +11,36 @@
   <properties>
     <twill.version>0.3.0-incubating</twill.version>
     <hadoop.version>2.4.1</hadoop.version>
+    <hazelcast.version>3.3.1</hazelcast.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-common</artifactId>
-      <version>${hadoop.version}</version>
+      <version>${hadoop.version}</version>      
     </dependency>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-yarn-api</artifactId>
-      <version>${hadoop.version}</version>
+      <version>${hadoop.version}</version>      
     </dependency>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-yarn-client</artifactId>
-      <version>${hadoop.version}</version>
-    </dependency>    
-    
+      <version>${hadoop.version}</version>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>${hadoop.version}</version>      
+    </dependency>
+
+    <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast</artifactId>
+      <version>${hazelcast.version}</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

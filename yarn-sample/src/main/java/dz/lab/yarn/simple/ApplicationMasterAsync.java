@@ -39,7 +39,7 @@ public class ApplicationMasterAsync
   private int                               appMasterRpcPort     = 0;
   private String                            appMasterTrackingUrl = "";
   private String                            jarPath;
-  private int                               numContainers;
+  private int                               numContainers        = 2;
   private AMRMClientAsync<ContainerRequest> rmClient;
 
   /**
@@ -96,8 +96,11 @@ public class ApplicationMasterAsync
       return false;
     }
     this.jarPath = new URI(cliParser.getOptionValue("jar")).getPath();
-    this.numContainers = Integer.valueOf(cliParser.getOptionValue("num_containers", String.valueOf(2)));
-    LOG.info("Jar path is "+jarPath);
+    if (cliParser.hasOption("num_containers"))
+    {
+      this.numContainers = Integer.valueOf(cliParser.getOptionValue("num_containers"));
+    }
+    LOG.info("Jar path is " + jarPath);
     return true;
   }
 

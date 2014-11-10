@@ -1,0 +1,42 @@
+<hazelcast
+  xsi:schemaLocation="http://www.hazelcast.com/schema/config http://www.hazelcast.com/schema/config/hazelcast-config-3.0.xsd"
+  xmlns=" http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <properties>
+    <property name="hazelcast.logging.type">log4j</property><!-- jdk, log4j, slf4j, none -->
+  </properties>
+
+  <!-- enable member discovery for clustered mode -->
+  <network>
+    <join>
+      <multicast enabled="true" />
+    </join>
+  </network>
+  <management-center enabled="true">
+    http://192.168.2.8:8080/hazelcast-mancenter
+  </management-center>
+  
+  <!-- Distributed service executor -->
+  <executor-service name="executor">
+    <pool-size>5</pool-size>
+  </executor-service>
+  <!-- Distributed service executor -->
+  
+  <!-- Using wildcard for generic configuration -->
+  <map name="words">
+    <!-- Set how values are stored: BINARY, OBJECT, CACHED -->
+    <in-memory-format>OBJECT</in-memory-format>
+
+    <!--Eviction <time-to-live-seconds>10</time-to-live-seconds> <max-size policy="PER_NODE">200000</max-size> 
+      <eviction-policy>LRU</eviction-policy> <max-idle-seconds>60</max-idle-seconds> Eviction -->
+
+    <!-- external store <map-store enabled="true" write-delay-seconds="1"> configure write behind to 
+      propagate the changes to the store asynchronously <class-name>com.heavenize.core.cache.hazelcast.HazelcastMapStore</class-name> 
+      </map-store> external store -->
+
+    <!-- Configure availability -->
+    <!--<backup-count>1</backup-count> --><!--synchronous backup -->
+    <!--<async-backup-count>1</async-backup-count> -->
+  </map>
+
+</hazelcast>
